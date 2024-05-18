@@ -1,10 +1,18 @@
 import type {TTermoResponseData} from "../../../Api/Models/TTermoResponse.ts";
+import {IBaseTableColumn} from "../../Base/BaseTable/Models/IBaseTableColumn.ts";
+import {formatDateString} from "../../../Utils/FormatDateString.ts";
+import {sortDateStrings} from "../../../Utils/SortDateStrings.ts";
 
-const createTermoColumns = (allPossibleDepths: Record<string, string>) => [
+const createTermoColumns = (allPossibleDepths: Record<string, string>): IBaseTableColumn[] => [
     {
         title: "Дата и время измерения",
         key: "time",
         dataIndex: "time",
+        sorter: (a, b) => {
+            console.log(sortDateStrings(a.time, b.time))
+            return sortDateStrings(a.time, b.time)
+        },
+        render: (dateString) => formatDateString(dateString)
     },
     {
         title: "Te",
@@ -26,8 +34,6 @@ const getTablePropsFromTermoData = (data: TTermoResponseData) => {
 
         return acc
     }, {allPossibleDepths: {}, dataSource: []})
-
-    console.log(dataSource)
 
     return {dataSource, columns: createTermoColumns(allPossibleDepths)}
 }

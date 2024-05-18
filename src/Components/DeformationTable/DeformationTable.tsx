@@ -27,12 +27,11 @@ const DeformationTable = memo(() => {
     useEffect(() => {
 
         httpApi.getDeformation().then((it) => {
-
             setDataSource(it.data)
         })
     }, []);
 
-    return <BaseTable dataSource={dataSource} columns={COLUMNS}/>
+    return dataSource.length === 0 ? null : <BaseTable dataSource={dataSource} columns={COLUMNS}/>
 });
 DeformationTable.displayName = "DeformationTable";
 

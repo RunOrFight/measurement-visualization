@@ -6,6 +6,7 @@ interface IBaseTableColumn {
     key?: string
     render?: (data: string) => ReactNode
     children?: IBaseTableColumn[]
+    sorter?: (a, b) => number
 }
 
 interface IBaseTableColumnEntity extends Omit<IBaseTableColumn, "children"> {
