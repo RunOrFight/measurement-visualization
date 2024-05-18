@@ -12,7 +12,7 @@
       "sensorType": "DeformationControl",
       "status": true,
       "data": {
-        "value": 69.5336,
+        "cccc": 69.5336,
         "isValid": true,
         "delta": 0.008600000000001273
       },
