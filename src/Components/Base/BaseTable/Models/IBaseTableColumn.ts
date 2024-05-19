@@ -1,16 +1,36 @@
 import {ReactNode} from "react";
+import {TExplicitAny} from "../../../../Types/TExplicitAny.ts";
+
+type TBaseTableColumnSorter = Exclude<Parameters<typeof Array.prototype.sort>[0], undefined>
+
+type TBaseTableColumnFilter = Exclude<Parameters<typeof Array.prototype.filter>[0], undefined>
+
+type TBaseTableColumnFilterType = "date-range"
+
+type TBaseTableColumnFixationType = "top" | "top-left"
 
 interface IBaseTableColumn {
     title: string
-    dataIndex?: string
+    dataIndex: string
     key?: string
-    render?: (data: string) => ReactNode
+    render?: (data: TExplicitAny) => ReactNode
     children?: IBaseTableColumn[]
-    sorter?: (a, b) => number
+    sorter?: TBaseTableColumnSorter
+    filterType?: TBaseTableColumnFilterType
+    fixationType?: TBaseTableColumnFixationType
 }
 
 interface IBaseTableColumnEntity extends Omit<IBaseTableColumn, "children"> {
-    hasChildren: boolean
+    numberOfChildren: number
+    left?: number
 }
 
-export type {IBaseTableColumn, IBaseTableColumnEntity};
+
+export type {
+    IBaseTableColumn,
+    IBaseTableColumnEntity,
+    TBaseTableColumnSorter,
+    TBaseTableColumnFilterType,
+    TBaseTableColumnFilter,
+    TBaseTableColumnFixationType
+};

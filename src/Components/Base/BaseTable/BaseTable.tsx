@@ -1,52 +1,40 @@
-import {FC, MouseEventHandler, useState} from "react";
+import {FC, useCallback, useMemo, useState} from "react";
 import {createBaseTableColumnsMapRecursive} from "./Utils/CreateBaseTableColumnsMapRecursive.ts";
-import {IBaseTableColumn} from "./Models/IBaseTableColumn.ts";
-import {ESortDirection} from "../../../Enums/ESortDirection.ts";
+import {IBaseTableColumn, IBaseTableColumnEntity, TBaseTableColumnSorter} from "./Models/IBaseTableColumn.ts";
+import classes from "./BaseTable.module.css"
+import {BaseTableHead} from "./Components/BaseTableHead/BaseTableHead.tsx";
+import {TBaseTableHandleFilter, TBaseTableHandleSort} from "./Models/TBaseTableHandle.ts";
+import {TExplicitAny} from "../../../Types/TExplicitAny.ts";
+import {BaseTableBody} from "./Components/BaseTableBody/BaseTableBody.tsx";
 
 interface IBaseTableProps {
-    dataSource: Record<string, unknown>[]
+    dataSource: Record<string, TExplicitAny>[]
     columns: IBaseTableColumn[]
 }
 
 const BaseTable: FC<IBaseTableProps> = ({columns, dataSource}) => {
     const [stateData, setStateData] = useState(dataSource)
-    const [sortDirection, setSortDirection] = useState(ESortDirection.ASCENDING)
+    const [columnsToUse, setColumnsToUse] = useState<IBaseTableColumnEntity[]>([])
 
-    const columnsToRender = Object.values(createBaseTableColumnsMapRecursive(columns))
+    const columnsToRender = useMemo(() => Object.values(createBaseTableColumnsMapRecursive(columns)), [columns])
 
-    const columnsWithChildren = columnsToRender.flat().filter((it) => !it.hasChildren)
+    const columnsWithChildren = useMemo(
+        () => columnsToRender.flat().filter((it) => it.numberOfChildren === 0), [columnsToRender]
+    )
 
-    const handleClick = (sorter: IBaseTableColumn["sorter"]): MouseEventHandler<HTMLTableHeaderCellElement> =>
-        (event) => {
-            if (sorter) {
+    const handleSort: TBaseTableHandleSort = useCallback((sorter: TBaseTableColumnSorter) => {
+        setStateData((data) => [...data].sort(sorter))
+    }, [setStateData])
 
-                setStateData([...stateData].sort((a, b) => {
-                    const sortResult = sorter(a, b)
-                    return sortDirection === ESortDirection.ASCENDING ? sortResult : sortResult * -1
-                }))
+    const handleFilter: TBaseTableHandleFilter = useCallback((filter) => {
+        setStateData(dataSource.filter(filter))
+    }, [dataSource, setStateData])
 
-                setSortDirection(sortDirection === ESortDirection.ASCENDING ? ESortDirection.DESCENDING : ESortDirection.ASCENDING)
-            }
-        }
+    return <table className={classes.baseTable}>
+        <BaseTableHead columnsToRender={columnsToRender} handleSort={handleSort} handleFilter={handleFilter}
+                       setColumnsToUse={setColumnsToUse}/>
 
-    return <table>
-        <thead>
-        {columnsToRender.map((ths, rowIndex, array) => {
-            return <tr key={rowIndex}>
-                {ths.map(({title, hasChildren, key, sorter}, index) =>
-                    <th key={key ?? index} onClick={handleClick(sorter)}
-                        rowSpan={hasChildren ? 1 : array.length - rowIndex}>{title}</th>)}
-            </tr>
-        })}
-        </thead>
-
-        <tbody>
-        {stateData.map((it, index) => <tr key={index}>
-            {columnsWithChildren.map(({dataIndex, key, render}) => <td key={it[key]}>
-                {render ? render(it[dataIndex]) : it[dataIndex]}
-            </td>)}
-        </tr>)}
-        </tbody>
+        {columnsToUse.length === 0 ? null : <BaseTableBody rows={stateData} columns={columnsWithChildren}/>}
     </table>
 }
 BaseTable.displayName = "BaseTable"

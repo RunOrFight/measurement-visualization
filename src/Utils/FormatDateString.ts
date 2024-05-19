@@ -1,4 +1,4 @@
-const padZero = (value: string | number) => `0${value}`.slice(-2);
+import {padZero} from "./PadZero.ts";
 
 const formatDateString = (dateString: string) => {
     const date = new Date(dateString)

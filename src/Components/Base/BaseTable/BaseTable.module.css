@@ -1,0 +1,23 @@
+.baseTable {
+    width: 100%;
+    text-align: start;
+    border-radius: 8px;
+    border-spacing: 0;
+}
+
+.baseTable th, .baseTable td {
+    text-align: start;
+    padding: 16px;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+    overflow-wrap: break-word;
+}
+
+.baseTable td {
+    border: 1px solid var(--borderColor);
+}
+
+.baseTable th {
+    background: var(--backgroundColor);
+    border: 1px solid var(--borderColor)
+}

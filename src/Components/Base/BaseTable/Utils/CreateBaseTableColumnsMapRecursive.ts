@@ -8,11 +8,10 @@ const createBaseTableColumnsMapRecursive = (columns: IBaseTableColumn[], level =
             children,
             ...rest
         }) => {
-            const hasChildren = children !== undefined
 
-            acc[level].push({...rest, hasChildren})
+            acc[level].push({...rest, numberOfChildren: children?.length ?? 0})
 
-            if (!hasChildren) {
+            if (!children) {
                 return acc
             }
 

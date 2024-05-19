@@ -25,7 +25,6 @@ const DeformationTable = memo(() => {
     const [dataSource, setDataSource] = useState([])
 
     useEffect(() => {
-
         httpApi.getDeformation().then((it) => {
             setDataSource(it.data)
         })

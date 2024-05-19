@@ -1,0 +1,11 @@
+.fixationTop {
+    position: sticky;
+    top: -1px;
+    z-index: 2;
+}
+
+.fixationLeft {
+    position: sticky;
+    left: -1px;
+    z-index: 3;
+}

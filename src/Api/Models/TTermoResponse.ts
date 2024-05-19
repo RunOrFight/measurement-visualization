@@ -4,6 +4,4 @@ type TTermoResponse = THttpApiResponse<"getTermo">
 
 type TTermoResponseData = TTermoResponse["data"]
 
-type TTermoResponseDataItem = TTermoResponseData[number]
-
-export type {TTermoResponse, TTermoResponseData, TTermoResponseDataItem}
+export type {TTermoResponse, TTermoResponseData}
