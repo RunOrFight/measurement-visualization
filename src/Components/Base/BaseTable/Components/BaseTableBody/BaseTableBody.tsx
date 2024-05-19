@@ -12,7 +12,7 @@ const BaseTableBody = memo<IBaseTableBodyProps>(({rows, columns}) => {
     if (rows.length === 0) {
         return <tbody>
         <tr>
-            <td colSpan={columns.length}>{"Нет данных"}</td>
+            <td colSpan={columns.flat().length}>{"Нет данных"}</td>
         </tr>
         </tbody>
     }
