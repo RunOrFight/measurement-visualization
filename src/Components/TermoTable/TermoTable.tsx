@@ -14,8 +14,8 @@ const TermoTable = () => {
         httpApi.getTermo().then((it) => {
             const {columns, dataSource} = getTablePropsFromTermoData(it.data)
 
-            setDataSource(dataSource)
             setColumns(columns)
+            setDataSource(dataSource)
         })
     }, []);
 

@@ -1,4 +1,4 @@
-import {Dispatch, memo, SetStateAction, useCallback, useEffect, useRef,} from "react";
+import {Dispatch, memo, SetStateAction, useCallback, useRef,} from "react";
 import {IBaseTableColumnEntity, TBaseTableColumnFixationType} from "../../Models/IBaseTableColumn.ts";
 import {BaseTableSortButton} from "../BaseTableSortButton/BaseTableSortButton.tsx";
 import {BaseTableFilterButton} from "../BaseTableFilterButton/BaseTableFilterButton.tsx";
@@ -17,9 +17,9 @@ interface IThProps extends IBaseTableColumnEntity {
     handleFilter: TBaseTableHandleFilter
     rowIndex: number
     numberOfRows: number
-    handleRender: (rowIndex: number, cellIndex: number, left: number,) => void
+    handleRender: (rowIndex: number, cellIndex: number, fixationType?: TBaseTableColumnFixationType) =>
+        (node: HTMLTableHeaderCellElement | null) => void
     cellIndex: number
-    isLast: boolean
 }
 
 const Th = memo<IThProps>
@@ -36,42 +36,22 @@ const Th = memo<IThProps>
       fixationType,
       handleRender,
       cellIndex,
-      isLast
   }) => {
     const rowSpan = numberOfChildren > 0 ? 1 : numberOfRows - rowIndex
     const colSpan = numberOfChildren > 0 ? numberOfChildren : 1
-    const className = fixationType ? FIXATION_TYPE_TO_CLASSNAME_MAP[fixationType] : undefined
+    const className = fixationType ? FIXATION_TYPE_TO_CLASSNAME_MAP[fixationType] : ""
 
-
-    const callbackRef = (node: HTMLTableHeaderCellElement) => {
-        if (!node) {
-            return
-        }
-
-        if (fixationType === "top-left") {
-            const lastLeftFixation = node.getRootNode().lastLeftFixation ?? 0
-            const left = lastLeftFixation - BORDER_WIDTH
-
-            node.style.left = `${left}px`
-            node.getRootNode().lastLeftFixation = node.offsetWidth + lastLeftFixation
-            handleRender(rowIndex, cellIndex, left)
-
-
-        }
-
-        if (isLast) {
-            node.getRootNode().lastLeftFixation = 0
-        }
-    }
-
-    return <th rowSpan={rowSpan} colSpan={colSpan} className={className} ref={callbackRef}>
+    return <th rowSpan={rowSpan} colSpan={colSpan}
+               className={filterType ? `${className} ${classes.withFilter}` : className}
+               ref={handleRender(rowIndex, cellIndex, fixationType)}>
         {title}
 
-        {sorter ? <BaseTableSortButton sorter={sorter} handleSort={handleSort}/> : null}
+        {sorter ? <BaseTableSortButton sorter={sorter} handleSort={handleSort} className={classes.sortButton}/> : null}
 
         {
             filterType ?
-                <BaseTableFilterButton handleFilter={handleFilter} dataIndex={dataIndex} filterType={filterType}/>
+                <BaseTableFilterButton handleFilter={handleFilter} dataIndex={dataIndex} filterType={filterType}
+                                       className={classes.filterButton}/>
                 : null
         }
 
@@ -84,19 +64,37 @@ interface IBaseTableHeadProps {
     columnsToRender: IBaseTableColumnEntity[][],
     handleSort: TBaseTableHandleSort
     handleFilter: TBaseTableHandleFilter
-    setColumnsToUse: Dispatch<SetStateAction<IBaseTableColumnEntity[]>>
+    setColumnsToUse: Dispatch<SetStateAction<IBaseTableColumnEntity[][]>>
 }
 
 const BaseTableHead = memo<IBaseTableHeadProps>(({columnsToRender, setColumnsToUse, handleSort, handleFilter}) => {
     const mutableColumns = useRef(columnsToRender)
-    
-    const handleRender = useCallback((rowIndex: number, cellIndex: number, left: number,) => {
-        mutableColumns.current[rowIndex][cellIndex].left = left
-    }, [])
+    const lastLeftFixation = useRef(0)
 
-    useEffect(() => {
-        setColumnsToUse(mutableColumns.current.flat())
-    }, [setColumnsToUse]);
+    const handleRender = useCallback((rowIndex: number, cellIndex: number, fixationType?: TBaseTableColumnFixationType,) =>
+        (node: HTMLTableHeaderCellElement | null) => {
+            if (node === null) {
+                return
+            }
+
+            if (fixationType === "top-left") {
+                const left = lastLeftFixation.current - BORDER_WIDTH
+
+                node.style.left = `${left}px`
+
+                lastLeftFixation.current += node.offsetWidth
+
+                mutableColumns.current[rowIndex][cellIndex].left = left
+            }
+
+            const isLast = rowIndex + 1 === mutableColumns.current.length &&
+                cellIndex + 1 === mutableColumns.current[rowIndex].length
+
+            if (isLast) {
+                lastLeftFixation.current = 0
+                setColumnsToUse(mutableColumns.current)
+            }
+        }, [setColumnsToUse])
 
     return <thead>
     {
@@ -107,7 +105,7 @@ const BaseTableHead = memo<IBaseTableHeadProps>(({columnsToRender, setColumnsToU
                         <Th key={`cell_${key ?? cellIndex}`} {...column} rowIndex={rowIndex}
                             numberOfRows={array.length} handleSort={handleSort} handleFilter={handleFilter}
                             handleRender={handleRender}
-                            cellIndex={cellIndex} isLast={cellIndex + 1 === ths.length}/>)
+                            cellIndex={cellIndex}/>)
                     )
                 }
             </tr>

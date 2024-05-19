@@ -17,24 +17,24 @@ const createTermoColumns = (allPossibleDepths: Record<string, string>): IBaseTab
         fixationType: "top-left"
     },
     {
-        title: "Te",
+        title: "Tcр.",
         dataIndex: "averageTemperature",
         render: (data: number) => data.toFixed(2),
         fixationType: "top-left"
     },
     {
         dataIndex: "depth",
-        title: "Глубина",
-        children: Object.keys(allPossibleDepths).map((it) =>
-            ({
-                title: it,
-                fixationType: "top",
-                dataIndex: it,
-                render: (data: {
-                    value: number,
-                    isValid: boolean
-                } | undefined) => data?.value.toFixed(2) ?? NOOP_CELL_VALUE
-            }))
+        title: "Глубина, м",
+        children: Object.keys(allPossibleDepths).map((it) => ({
+            title: it,
+            fixationType: "top",
+            dataIndex: it,
+            render: (data: {
+                value: number,
+                isValid: boolean
+            } | undefined) => data?.value.toFixed(2) ?? NOOP_CELL_VALUE
+        }))
+
     }
 ]
 

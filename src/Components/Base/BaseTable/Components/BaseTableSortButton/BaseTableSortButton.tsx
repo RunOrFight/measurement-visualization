@@ -6,10 +6,11 @@ import {ESortDirection} from "../../../../../Enums/ESortDirection.ts";
 
 interface IBaseTableSortButtonProps {
     sorter: TBaseTableColumnSorter,
-    handleSort: TBaseTableHandleSort
+    handleSort: TBaseTableHandleSort,
+    className?: string
 }
 
-const BaseTableSortButton = memo<IBaseTableSortButtonProps>(({handleSort, sorter}) => {
+const BaseTableSortButton = memo<IBaseTableSortButtonProps>(({handleSort, sorter, className}) => {
     const [sortDirection, setSortDirection] = useState(ESortDirection.ASCENDING)
 
 
@@ -24,9 +25,9 @@ const BaseTableSortButton = memo<IBaseTableSortButtonProps>(({handleSort, sorter
         setSortDirection(sortDirection === ESortDirection.ASCENDING ? ESortDirection.DESCENDING : ESortDirection.ASCENDING)
     }
 
-    return <span onClick={onClick}>
-                            <ArrowDownIconSvg/>
-                                </span>
+    return <span onClick={onClick} className={className}>
+        <ArrowDownIconSvg/>
+    </span>
 });
 BaseTableSortButton.displayName = "BaseTableSortButton";
 

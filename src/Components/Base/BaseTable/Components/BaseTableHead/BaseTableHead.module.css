@@ -9,3 +9,24 @@
     left: -1px;
     z-index: 3;
 }
+
+.sortButton, .filterButton {
+    cursor: pointer;
+    margin-left: 3px;
+}
+
+.sortButton svg, .filterButton svg {
+    margin-bottom: -7px;
+}
+
+.sortButton:hover, .filterButton:hover {
+    color: blue;
+}
+
+.sortButton:active, .filterButton:hover {
+    color: cornflowerblue;
+}
+
+.withFilter {
+    z-index: 4;
+}

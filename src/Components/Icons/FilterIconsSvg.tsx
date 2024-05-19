@@ -1,8 +1,10 @@
 const FilterIconsSvg = () =>
-    <svg viewBox="64 64 896 896" focusable="false" data-icon="filter" width="1em" height="1em" fill="currentColor"
-         aria-hidden="true">
-        <path
-            d="M349 838c0 17.7 14.2 32 31.8 32h262.4c17.6 0 31.8-14.3 31.8-32V642H349v196zm531.1-684H143.9c-24.5 0-39.8 26.7-27.5 48l221.3 376h348.8l221.3-376c12.1-21.3-3.2-48-27.7-48z"></path>
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path fillRule="evenodd" clipRule="evenodd"
+              d="M5.00006 2C4.44778 2 4.00006 2.44772 4.00006 3V5.00001H20.0001V3C20.0001 2.44772 19.5523 2 19.0001 2H5.00006ZM19.7823 7.00001H4.21782C4.33216 7.22455 4.48913 7.42794 4.68305 7.59762L10.6831 12.8476C11.4371 13.5074 12.563 13.5074 13.3171 12.8476L19.3171 7.59762C19.511 7.42794 19.668 7.22455 19.7823 7.00001Z"
+              fill="currentColor"/>
+        <path fillRule="evenodd" clipRule="evenodd" d="M14 16.7049L14 10H10V18.7049L14 16.7049Z" fill="currentColor"/>
     </svg>
+
 
 export {FilterIconsSvg}

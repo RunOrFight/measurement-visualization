@@ -14,13 +14,9 @@ interface IBaseTableProps {
 
 const BaseTable: FC<IBaseTableProps> = ({columns, dataSource}) => {
     const [stateData, setStateData] = useState(dataSource)
-    const [columnsToUse, setColumnsToUse] = useState<IBaseTableColumnEntity[]>([])
+    const [columnsToUse, setColumnsToUse] = useState<IBaseTableColumnEntity[][]>([])
 
     const columnsToRender = useMemo(() => Object.values(createBaseTableColumnsMapRecursive(columns)), [columns])
-
-    const columnsWithChildren = useMemo(
-        () => columnsToRender.flat().filter((it) => it.numberOfChildren === 0), [columnsToRender]
-    )
 
     const handleSort: TBaseTableHandleSort = useCallback((sorter: TBaseTableColumnSorter) => {
         setStateData((data) => [...data].sort(sorter))
@@ -31,10 +27,14 @@ const BaseTable: FC<IBaseTableProps> = ({columns, dataSource}) => {
     }, [dataSource, setStateData])
 
     return <table className={classes.baseTable}>
-        <BaseTableHead columnsToRender={columnsToRender} handleSort={handleSort} handleFilter={handleFilter}
-                       setColumnsToUse={setColumnsToUse}/>
+        <BaseTableHead
+            columnsToRender={columnsToRender}
+            handleSort={handleSort}
+            handleFilter={handleFilter}
+            setColumnsToUse={setColumnsToUse}
+        />
 
-        {columnsToUse.length === 0 ? null : <BaseTableBody rows={stateData} columns={columnsWithChildren}/>}
+        {columnsToUse.length === 0 ? null : <BaseTableBody rows={stateData} columns={columnsToUse}/>}
     </table>
 }
 BaseTable.displayName = "BaseTable"
