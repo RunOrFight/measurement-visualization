@@ -1,5 +1,5 @@
-const sortDateStrings = (dateString1: Date, dateString2: Date) => {
-    return new Date(dateString1) - new Date(dateString2);
+const sortDateStrings = (dateString1: string, dateString2: string) => {
+    return new Date(dateString1).getTime() - new Date(dateString2).getTime();
 };
 
 export {sortDateStrings}
