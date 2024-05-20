@@ -1,4 +1,4 @@
-import {FC, useCallback, useMemo, useState} from "react";
+import {FC, ReactNode, useCallback, useMemo, useState} from "react";
 import {createBaseTableColumnsMapRecursive} from "./Utils/CreateBaseTableColumnsMapRecursive.ts";
 import {IBaseTableColumn, IBaseTableColumnEntity, TBaseTableColumnSorter} from "./Models/IBaseTableColumn.ts";
 import classes from "./BaseTable.module.css"
@@ -10,9 +10,10 @@ import {BaseTableBody} from "./Components/BaseTableBody/BaseTableBody.tsx";
 interface IBaseTableProps {
     dataSource: Record<string, TExplicitAny>[]
     columns: IBaseTableColumn[]
+    caption?: ReactNode
 }
 
-const BaseTable: FC<IBaseTableProps> = ({columns, dataSource}) => {
+const BaseTable: FC<IBaseTableProps> = ({columns, dataSource, caption}) => {
     const [stateData, setStateData] = useState(dataSource)
     const [columnsToUse, setColumnsToUse] = useState<IBaseTableColumnEntity[][]>([])
 
@@ -27,6 +28,8 @@ const BaseTable: FC<IBaseTableProps> = ({columns, dataSource}) => {
     }, [dataSource, setStateData])
 
     return <table className={classes.baseTable}>
+        {caption ? <caption>{caption}</caption> : null}
+
         <BaseTableHead
             columnsToRender={columnsToRender}
             handleSort={handleSort}

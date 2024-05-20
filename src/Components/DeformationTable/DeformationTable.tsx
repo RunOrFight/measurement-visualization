@@ -1,10 +1,11 @@
-import {memo, useEffect, useState} from "react";
+import {memo, useCallback, useEffect, useState} from "react";
 import {BaseTable} from "../Base/BaseTable/BaseTable.tsx";
 import {httpApi} from "../../Api/HttpApi.ts";
 import {IBaseTableColumn} from "../Base/BaseTable/Models/IBaseTableColumn.ts";
 import {formatDateString} from "../../Utils/FormatDateString.ts";
 import {sortDateStrings} from "../../Utils/SortDateStrings.ts";
 import {TDeformationResponseData} from "../../Api/Models/TDeformationResponse.ts";
+import {DeformationTrendModal} from "../DeformationTrendModal/DeformationTrendModal.tsx";
 
 
 const COLUMNS: IBaseTableColumn[] = [
@@ -30,16 +31,38 @@ const COLUMNS: IBaseTableColumn[] = [
     }
 ]
 
+const Caption = memo<{ openModal: () => void }>(({openModal}) => {
+    return <div>
+        <span>{"Деформационная марка"}</span>
+
+        &nbsp;
+
+        <button onClick={openModal}>{"Tренд"}</button>
+    </div>
+})
+
 const DeformationTable = memo(() => {
-    const [dataSource, setDataSource] = useState<TDeformationResponseData>([])
+    const [deformationData, setDeformationData] = useState<TDeformationResponseData>([])
+    const [modalVisible, setModalVisible] = useState(false)
+
+    const closeModal = useCallback(() => setModalVisible(false), [])
+
+    const openModal = useCallback(() => setModalVisible(true), [])
 
     useEffect(() => {
         httpApi.getDeformation().then((it) => {
-            setDataSource(it.data)
+            setDeformationData(it.data)
         })
     }, []);
 
-    return dataSource.length === 0 ? null : <BaseTable dataSource={dataSource} columns={COLUMNS}/>
+    if (deformationData.length === 0) {
+        return null
+    }
+
+    return <>
+        <BaseTable dataSource={deformationData} columns={COLUMNS} caption={<Caption openModal={openModal}/>}/>
+        {modalVisible ? <DeformationTrendModal closeModal={closeModal} deformationData={deformationData}/> : null}
+    </>
 });
 DeformationTable.displayName = "DeformationTable";
 
