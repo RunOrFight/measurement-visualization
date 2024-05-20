@@ -13,7 +13,7 @@ interface IBaseTableColumn {
     title: string
     dataIndex: string
     key?: string
-    render?: (data: TExplicitAny) => ReactNode
+    render?: (data: TExplicitAny, dataItem: TExplicitAny) => ReactNode
     children?: IBaseTableColumn[]
     sorter?: TBaseTableColumnSorter
     filterType?: TBaseTableColumnFilterType

@@ -24,5 +24,6 @@
 
 .baseTable caption {
     padding: 16px;
-    border: 1px solid var(--borderColor)
+    border: 1px solid var(--borderColor);
+    text-align: left;
 }

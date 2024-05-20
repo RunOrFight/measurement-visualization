@@ -1,0 +1,8 @@
+.baseTabs {
+    display: flex;
+    gap: 5px;
+}
+
+.active {
+    background: var(--backgroundColor);
+}

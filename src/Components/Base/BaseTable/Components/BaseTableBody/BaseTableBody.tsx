@@ -31,7 +31,7 @@ const BaseTableBody = memo<IBaseTableBodyProps>(({rows, columns}) => {
                             return (
                                 <td key={i} className={fixationType === "top-left" ? classes.fixationLeft : undefined}
                                     style={left ? {left: `${left}px`} : {}}>
-                                    {render ? render(it[dataIndex]) : it[dataIndex]}
+                                    {render ? render(it[dataIndex], it) : it[dataIndex]}
                                 </td>
                             )
                         }))

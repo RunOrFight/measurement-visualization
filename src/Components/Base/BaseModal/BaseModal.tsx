@@ -25,9 +25,11 @@ const BaseModal: FC<TBaseModalProps> = ({children, closeModal,}) => {
             <div className={classes.fullScreenContainer}>
                 <div className={classes.overlay}/>
 
-                <span className={classes.closeButton} onClick={closeModal}>
+                {
+                    closeModal ? <span className={classes.closeButton} onClick={closeModal}>
                          <CloseIconSvg/>
-                    </span>
+                    </span> : null
+                }
 
                 {children}
             </div>

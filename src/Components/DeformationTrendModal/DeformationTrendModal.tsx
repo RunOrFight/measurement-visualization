@@ -5,6 +5,7 @@ import Plot from "react-plotly.js";
 import {TDeformationResponseData} from "../../Api/Models/TDeformationResponse.ts";
 import {analyzeDeformationData} from "./Utils/AnalyzeDeformationData.ts";
 import {analyzeDeformationTrend, IDeformationTrendAnalysis} from "./Utils/AnalyzeDeformationTrend.ts";
+import {Loader} from "../Loader/Loader.tsx";
 
 interface IDeformationTrendModalProps {
     closeModal: () => void
@@ -19,7 +20,7 @@ const DeformationTrendModal = memo<IDeformationTrendModalProps>(({closeModal, de
     }, []);
 
     if (trendAnalysis === null) {
-        return null
+        return <Loader/>
     }
 
     const {deltas, maxDelta, minDelta, dates} = analyzeDeformationData(deformationData)
@@ -45,7 +46,7 @@ const DeformationTrendModal = memo<IDeformationTrendModalProps>(({closeModal, de
                     mode: 'lines+markers',
                     marker: {color: 'blue'},
                     name: "Дельта",
-                    
+
                 },
                 {
                     x: [firstTrendDate, lastTrendDate],

@@ -1,3 +1,4 @@
-.deformation-table {
-    position: static;
+.caption {
+    display: flex;
+    justify-content: space-between;
 }

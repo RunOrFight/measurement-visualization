@@ -38,13 +38,18 @@ const createTermoColumns = (allPossibleDepths: Record<string, string>): IBaseTab
     }
 ]
 
-interface ITablePropsFromTermoData {
+interface ITablePropsFromTermoDataReduce {
     dataSource: TTermoResponseData
     allPossibleDepths: Record<string, TExplicitAny>
 }
 
+interface ITablePropsFromTermoData {
+    dataSource: TTermoResponseData
+    columns: IBaseTableColumn[]
+}
+
 const getTablePropsFromTermoData = (data: TTermoResponseData) => {
-    const {allPossibleDepths, dataSource} = data.reduce<ITablePropsFromTermoData>((acc, it) => {
+    const {allPossibleDepths, dataSource} = data.reduce<ITablePropsFromTermoDataReduce>((acc, it) => {
         acc.dataSource.push({...it, ...it.data})
 
         acc.allPossibleDepths = {...acc.allPossibleDepths, ...it.data}
@@ -56,3 +61,4 @@ const getTablePropsFromTermoData = (data: TTermoResponseData) => {
 }
 
 export {getTablePropsFromTermoData}
+export type {ITablePropsFromTermoData}

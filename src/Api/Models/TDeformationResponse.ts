@@ -4,4 +4,6 @@ type TDeformationResponse = THttpApiResponse<"getDeformation">
 
 type TDeformationResponseData = TDeformationResponse["data"]
 
-export type {TDeformationResponse, TDeformationResponseData}
+type TDeformationResponseDataItem = TDeformationResponseData[number]
+
+export type {TDeformationResponse, TDeformationResponseData, TDeformationResponseDataItem}

@@ -1,25 +1,20 @@
 import {useEffect, useState} from "react";
 import {BaseTable} from "../Base/BaseTable/BaseTable.tsx";
-import type {TTermoResponseData} from "../../Api/Models/TTermoResponse.ts";
 import {httpApi} from "../../Api/HttpApi.ts";
-import {IBaseTableColumn} from "../Base/BaseTable/Models/IBaseTableColumn.ts";
-import {getTablePropsFromTermoData} from "./Utils/GetTablePropsFromTermoData.ts";
+import {getTablePropsFromTermoData, ITablePropsFromTermoData} from "./Utils/GetTablePropsFromTermoData.ts";
+import {Loader} from "../Loader/Loader.tsx";
 
 const TermoTable = () => {
-    const [dataSource, setDataSource] = useState<TTermoResponseData>([])
-    const [columns, setColumns] = useState<IBaseTableColumn[]>([])
+    const [props, setProps] = useState<ITablePropsFromTermoData | null>(null)
 
     useEffect(() => {
-
         httpApi.getTermo().then((it) => {
-            const {columns, dataSource} = getTablePropsFromTermoData(it.data)
-
-            setColumns(columns)
-            setDataSource(dataSource)
+            setProps(getTablePropsFromTermoData(it.data))
         })
     }, []);
 
-    return dataSource.length === 0 ? null : <BaseTable dataSource={dataSource} columns={columns}/>
+    return props === null ? <Loader/> :
+        <BaseTable dataSource={props.dataSource} columns={props.columns} caption={"Термометрическая скважина: ts3"}/>
 }
 TermoTable.displayName = "TermoTable";
 

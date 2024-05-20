@@ -4,9 +4,10 @@ import {httpApi} from "../../Api/HttpApi.ts";
 import {IBaseTableColumn} from "../Base/BaseTable/Models/IBaseTableColumn.ts";
 import {formatDateString} from "../../Utils/FormatDateString.ts";
 import {sortDateStrings} from "../../Utils/SortDateStrings.ts";
-import {TDeformationResponseData} from "../../Api/Models/TDeformationResponse.ts";
+import {TDeformationResponseData, TDeformationResponseDataItem} from "../../Api/Models/TDeformationResponse.ts";
 import {DeformationTrendModal} from "../DeformationTrendModal/DeformationTrendModal.tsx";
-
+import {Loader} from "../Loader/Loader.tsx";
+import classes from "./DeformationTable.module.css"
 
 const COLUMNS: IBaseTableColumn[] = [
     {
@@ -26,14 +27,18 @@ const COLUMNS: IBaseTableColumn[] = [
     {
         title: "D, м",
         dataIndex: "data",
-        render: (data) => data?.delta ?? "-",
+        render: (data, dataItem: TDeformationResponseDataItem) => {
+            const style = {color: dataItem.state === "Danger" ? "red" : "black"}
+
+            return <span style={style}>{data?.delta ?? "-"}</span>
+        },
         fixationType: "top"
     }
 ]
 
 const Caption = memo<{ openModal: () => void }>(({openModal}) => {
-    return <div>
-        <span>{"Деформационная марка"}</span>
+    return <div className={classes.caption}>
+        <span>{"Деформационная марка: дм5"}</span>
 
         &nbsp;
 
@@ -56,7 +61,7 @@ const DeformationTable = memo(() => {
     }, []);
 
     if (deformationData.length === 0) {
-        return null
+        return <Loader/>
     }
 
     return <>
