@@ -7,7 +7,7 @@ interface IDeformationTrendAnalysis {
 
 
 const analyzeDeformationTrend = (deformationTrend: TDeformationTrendResponseData) => {
-    const criticalEndDateTimestamp = new Date(deformationTrend.criticalEndDate).getTime()
+    const criticalEndDateTimestamp = new Date(deformationTrend.endDate).getTime()
 
     return Object.entries(deformationTrend.points).reduce<IDeformationTrendAnalysis>((acc, [date, point]) => {
 
