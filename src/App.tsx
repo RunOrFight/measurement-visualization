@@ -5,11 +5,6 @@ import {ComponentType, createElement, useState} from "react";
 import {BaseTabs} from "./Components/Base/BaseTabs/BaseTabs.tsx";
 import {EActiveTable} from "./Enums/EActiveTable.ts";
 
-const ACTIVE_TABLE_TO_COMPONENT_MAP: Record<EActiveTable, ComponentType> = {
-    [EActiveTable.TERMO]: TermoTable,
-    [EActiveTable.DEFORMATION]: DeformationTable
-}
-
 const TABS_ITEMS = [
     {
         title: "Термокоса",
@@ -21,7 +16,12 @@ const TABS_ITEMS = [
     }
 ]
 
-function App() {
+const ACTIVE_TABLE_TO_COMPONENT_MAP: Record<EActiveTable, ComponentType> = {
+    [EActiveTable.TERMO]: TermoTable,
+    [EActiveTable.DEFORMATION]: DeformationTable
+}
+
+const App = () => {
     const [activeTable, setActiveTable] = useState(EActiveTable.TERMO)
 
     return <div className={classes.app}>
@@ -31,4 +31,4 @@ function App() {
     </div>
 }
 
-export default App
+export {App}

@@ -40,8 +40,6 @@ const Caption = memo<{ openModal: () => void }>(({openModal}) => {
     return <div className={classes.caption}>
         <span>{"Деформационная марка: дм5"}</span>
 
-        &nbsp;
-
         <button onClick={openModal}>{"Tренд"}</button>
     </div>
 })
